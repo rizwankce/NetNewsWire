@@ -23,10 +23,18 @@ class RefreshProgressView: UIView {
 		} else {
 			updateRefreshLabel()
 		}
-
 		scheduleUpdateRefreshLabel()
+		updateAccessibilityLabel()
 	}
 
+	func updateAccessibilityLabel() {
+		let progress = AccountManager.shared.combinedRefreshProgress
+		isAccessibilityElement = true
+		let status = progress.isComplete ? label.text : NSLocalizedString("Update in progress", comment: "Refresh progress view accessibility label")
+		accessibilityLabel = status
+		accessibilityHint = status
+	}
+	
 	override func didMoveToSuperview() {
 		progressChanged()
 	}
@@ -50,7 +58,7 @@ class RefreshProgressView: UIView {
 		} else {
 			label.text = ""
 		}
-
+		updateAccessibilityLabel()
 	}
 
 	@objc func progressDidChange(_ note: Notification) {
